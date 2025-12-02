@@ -3,6 +3,7 @@ import pandas as pd
 import torch
 from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import numpy as np
 
 from src.config import RAW_DATA_DIR, PROCESSED_DATA_DIR
 
@@ -15,16 +16,19 @@ tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 model = RobertaForSequenceClassification.from_pretrained(checkpoint, num_labels=3)
 
 class PreprocessCombinedNews:
-    def __init__(self, data, checkpoint, tokenizer=None, model=None):
+    def __init__(self, data, checkpoint, tokenizer=None, model=None, weights=None):
         self.data = data
         self.tokenizer = tokenizer
         self.model = model
+        self.importance_scores = range(25, 0, -1)
+        
         if not tokenizer:
             tokenizer = AutoTokenizer.from_pretrained(checkpoint)
         if not model:
             self.model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
-       
-        self.importance_scores = range(25, 0, -1)
+        if not weights:
+            self.importance_scores = range(25, 0, -1)
+            
         # self.device = 'mps' if torch.backends.mps.is_available() else "cpu"
         self.device = "cpu"
 
@@ -235,7 +239,8 @@ class PreprocessCombinedNews:
 
 
 if __name__ == "__main__":
-    preprocess = PreprocessCombinedNews(data, checkpoint, tokenizer, model)
+    weights = np.exp(-np.arange(1, 26)/7)
+    preprocess = PreprocessCombinedNews(data, checkpoint, tokenizer, model, weights)
     preprocess.transform()
     print("Imputation DONE")
     print()
