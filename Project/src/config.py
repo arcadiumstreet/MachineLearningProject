@@ -1,5 +1,5 @@
 from pathlib import Path
-import pathlib
+
 # 1. Get the path of THIS file (src/config.py)
 # 2. Go up parents to find the project root
 #    .parent = src/
