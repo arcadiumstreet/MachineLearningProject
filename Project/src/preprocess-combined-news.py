@@ -8,7 +8,7 @@ import numpy as np
 from src.config import RAW_DATA_DIR, PROCESSED_DATA_DIR
 
 input_path = RAW_DATA_DIR / "Combined_News_DJIA.csv"
-output_path = PROCESSED_DATA_DIR / "Combined_Merged_News_DJIA.csv"
+output_path = PROCESSED_DATA_DIR
 
 data = pd.read_csv(input_path)
 checkpoint = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
@@ -20,13 +20,13 @@ class PreprocessCombinedNews:
         self.data = data
         self.tokenizer = tokenizer
         self.model = model
-        self.importance_scores = range(25, 0, -1)
+        self.importance_scores = weights
         
         if not tokenizer:
             tokenizer = AutoTokenizer.from_pretrained(checkpoint)
         if not model:
             self.model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
-        if not weights:
+        if weights is None:
             self.importance_scores = range(25, 0, -1)
             
         # self.device = 'mps' if torch.backends.mps.is_available() else "cpu"
@@ -148,7 +148,7 @@ class PreprocessCombinedNews:
         self.data = self.data.map(self.merge_and_embed, batched=False)
 
         # Save the new dataset to a CSV file
-        self.data.to_csv(output_path, index=False)
+        self.data.save_to_disk(output_path)
         return self.data
 
 
@@ -172,9 +172,9 @@ class PreprocessCombinedNews:
             news_vectors_Vi = self.mean_pooling(token_embeddings, attention_mask)
 
             # Calculate the Final Daily News Vector (V_D) by applying weighted average
-            daily_news_vector_Vd = self.weighted_average(news_vectors_Vi)
+            # daily_news_vector_Vd = self.weighted_average(news_vectors_Vi)
 
-            return {'merged_embeddings': daily_news_vector_Vd}
+            return {'news_vectors': news_vectors_Vi.cpu()}
 
             
     def weighted_average(self, vectors_vi: torch.Tensor) -> torch.Tensor:
