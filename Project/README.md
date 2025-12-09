@@ -1,26 +1,29 @@
-## Combined NEWS DJIA
+### Launch
 
+`python main.py -lib [sklearn OR torch] -m [model.yaml]`
 
-### As features vector is (date, label, top1, top2, ...., top25)
+OR (to run experiments on every model of given lib)
 
-## $\rightarrow$ **find a way to weight news**
+`python main.py -lib [sklearn OR torch]` 
 
-### Solution 1: 
+### Directory
+- `checkpoints/`: saved model artifacts and configs for past runs
 
-$$\text{Vector}_{\text{Text}} = \text{Transformer}(\text{Text})$$
+- `configs/`: experiment settings and model hyperparameter YAMLs
 
-$$\text{Combined}_{\text{Vector}} = \text{Concatenate}(\text{Vector}_{\text{Text}}, \text{Importance})$$
-$$\text{Prediction} = \text{Dense}(\text{Combined}_{\text{Vector}}) \rightarrow \{0, 1\}$$
+- `data/`: raw inputs and processed datasets used for training/testing
 
+- `Doc/`: project documentation and reference PDFs
 
-### Solution 2:
+- `eda_output/`: exploratory data analysis outputs and plots
 
-- **Concept:** Encode the text for all 25 news items for a given day into a vector. Then, use the importance score (Top $i$) to create a **weighted average** of these 25 vectors.
+- `notebook/`: research and demo notebooks for experiments
 
-- **Process:**
-1. Get the vector embedding for News 1 ($V_1$), News 2 ($V_2$), ..., News 25 ($V_{25}$).
-2. Use the normalized importance scores ($I_1, I_2, ..., I_{25}$) as weights.
-3. Calculate the final Daily News Vector ($V_{D}$):
-$$V_{D} = \frac{\sum_{i=1}^{25} I_i \cdot V_i}{\sum_{i=1}^{25} I_i}$$
+- `results/`: aggregated metrics from completed experiments. According to **score**, **datetime** and **model_name**, easily load checkpoint in `checkpoints/`
 
-- **Advantage**: This creates a single, highly condensed feature vector ($V_{D}$) for the entire day that inherently prioritizes the most important news. This $V_D$ is then used as the input feature for your time series or classification model.
+- `src/`: source code for data loading, preprocessing, models, and training
+
+- `models/`: local model assets cache (currently empty/placeholder)
+
+- `todo.md`: project task list
+

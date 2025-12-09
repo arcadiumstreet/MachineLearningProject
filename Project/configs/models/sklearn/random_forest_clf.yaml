@@ -1,0 +1,18 @@
+model: RandomForestClassifier
+
+search_space:
+  n_estimators: [100, 200, 300]
+  max_depth: [10, 20, 30]
+  min_samples_split: [2, 5, 10]
+  min_samples_leaf: [1, 2, 4]
+  # max_features: ['auto', 'sqrt', 'log2']
+  # bootstrap: [True, False]
+  # criterion: ['gini', 'entropy']
+  # class_weight: [None, 'balanced']
+
+search:
+  type: random
+  n_trials: 3
+
+
+dataset: "data_test.csv" # be careful, it is a relative path to the root of the project

@@ -14,6 +14,9 @@ PROCESSED_DATA_DIR = DATA_DIR / "processed"
 
 MODELS_DIR = PROJECT_ROOT / "models"
 
+CHECKPOINTS_DIR = PROJECT_ROOT / "checkpoints"
+
+RESULTS_DIR = PROJECT_ROOT / "results"
 
 if not os.path.exists(RAW_DATA_DIR):
     os.makedirs(RAW_DATA_DIR)
@@ -22,6 +25,9 @@ if not os.path.exists(PROCESSED_DATA_DIR):
 
 if not os.path.exists(MODELS_DIR):
     os.makedirs(MODELS_DIR)
+
+if not os.path.exists(RESULTS_DIR):
+    os.makedirs(RESULTS_DIR)
 
 # Optional: Verify it works when you run this file directly
 if __name__ == "__main__":
