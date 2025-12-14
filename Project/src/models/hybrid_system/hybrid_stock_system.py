@@ -5,7 +5,7 @@ from torch.utils.data import TensorDataset, DataLoader
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from text_attention_net import TextAttentionNet
+from .text_attention_net import TextAttentionNet
 from typing import Union
 from collections import OrderedDict
 from sklearn.model_selection import train_test_split
@@ -169,7 +169,7 @@ class HybridStockSystem:
             
         # 3. Merge
         X_meta = np.column_stack((prob_num, prob_text))
-        final_pred = self.meta_learner.predict(X_meta)
+        final_pred = self.meta_learner.predict_proba(X_meta)
         return final_pred
 
 
